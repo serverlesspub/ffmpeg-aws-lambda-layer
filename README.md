@@ -8,6 +8,9 @@ You can use a pre-deployed ARN: `arn:aws:lambda:us-east-1:145266761615:layer:ffm
 
 The binares will be in `/opt/bin/ffmpeg` and `/opt/bin/ffprobe` inside your Lambda container.
 
+
+Check out the [Serverless Video Thumbnail Builder](https://github.com/effortless-serverless/s3-lambda-ffmpeg-thumbnail-builder) project for an example of how to wire this to a Lambda function.
+
 ## FFmpeg Version
 
 This package includes FFmpeg 4.1, packaged by Johan Van Sickle. Please consider supporting him for maintaining statically built FFmpeg packages. For more information, check out <https://johnvansickle.com/ffmpeg/>
