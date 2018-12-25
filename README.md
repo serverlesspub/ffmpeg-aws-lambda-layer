@@ -4,7 +4,7 @@ This is an AWS Lambda layer containing statically linked `ffmpeg` and `ffprobe` 
 
 ## Use within Lambda
 
-You can use a pre-deployed ARN: `arn:aws:lambda:us-east-1:145266761615:layer:ffmpeg:3` or deploy yourself -- edit Makefile to set your deployment bucket etc, then just run `make deploy`.
+You can use a pre-deployed ARN: `arn:aws:lambda:us-east-1:145266761615:layer:ffmpeg:4` or deploy yourself -- edit Makefile to set your deployment bucket etc, then just run `make deploy`.
 
 The binares will be in `/opt/bin/ffmpeg` and `/opt/bin/ffprobe` inside your Lambda container.
 
