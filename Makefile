@@ -1,28 +1,21 @@
-BASE_NAME=ffmpeg
-DEPLOYMENT_BUCKET_NAME := desole-packaging
-DEPLOYMENT_KEY := $(shell echo $(BASE_NAME)-$$RANDOM.zip)
-STACK_NAME := $(BASE_NAME)-lambda-layer
+STACK_NAME ?= ffmpeg-lambda-layer
 
 clean: 
 	rm -rf build
 
-build/bin/ffmpeg: 
-	mkdir -p build/bin
+build/layer/bin/ffmpeg: 
+	mkdir -p build/layer/bin
 	rm -rf build/ffmpeg*
-	cd build; \
-		curl https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz | tar x
-	mv build/ffmpeg*/ffmpeg build/ffmpeg*/ffprobe build/bin
+	cd build && curl https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz | tar x
+	mv build/ffmpeg*/ffmpeg build/ffmpeg*/ffprobe build/layer/bin
 
-build/layer.zip: build/bin/ffmpeg
-	cd build && zip -r layer.zip bin
+build/output.yaml: template.yaml build/layer/bin/ffmpeg
+	aws cloudformation package --template $< --s3-bucket $(DEPLOYMENT_BUCKET) --output-template-file $@
 
-# cloudformation has no support for packaging layers yet, so need to do this manually
-#
-build/output.yml: build/layer.zip cloudformation/template.yml
-	aws s3 cp build/layer.zip s3://$(DEPLOYMENT_BUCKET_NAME)/$(DEPLOYMENT_KEY)
-	sed "s:DEPLOYMENT_BUCKET_NAME:$(DEPLOYMENT_BUCKET_NAME):;s:DEPLOYMENT_KEY:$(DEPLOYMENT_KEY):" cloudformation/template.yml > build/output.yml
+deploy: build/output.yaml
+	aws cloudformation deploy --template $< --stack-name $(STACK_NAME)
+	aws cloudformation describe-stacks --stack-name $(STACK_NAME) --query Stacks[].Outputs --output table
 
-deploy: build/output.yml
-	aws cloudformation deploy --template-file build/output.yml --stack-name $(STACK_NAME)
-	aws cloudformation describe-stacks --stack-name $(STACK_NAME) --query Stacks[].Outputs[].OutputValue --output text
-
+deploy-example:
+	cd example && \
+		make deploy DEPLOYMENT_BUCKET=$(DEPLOYMENT_BUCKET) LAYER_STACK_NAME=$(STACK_NAME)

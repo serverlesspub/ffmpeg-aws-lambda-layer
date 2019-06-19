@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Static build of FFmpeg/FFprobe for Amazon Linux 2
+
+  Check out https://github.com/serverlesspub/ffmpeg-aws-lambda-layer
+  for more information.
+Resources:
+  LambdaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: ffmpeg 
+      Description: FFMPEG for AWS Lambda
+      ContentUri: build/layer
+      CompatibleRuntimes:
+        - nodejs10.x
+        - python3.6
+        - ruby2.5
+        - java8
+        - go1.x
+      LicenseInfo: GPL-2.0-or-later
+      RetentionPolicy: Retain
+
+Outputs:
+  LayerVersion:
+    Description: Layer ARN Reference
+    Value: !Ref LambdaLayer
+
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: ffmpeg-lambda-layer
+    Description: >
+      Static build of FFmpeg/FFprobe for Amazon Linux 2,
+      packaged as a Lambda layer. Bundles FFmpeg 4.1.3
+    Author: Gojko Adzic
+    SpdxLicenseId: GPL-2.0-or-later
+    LicenseUrl: LICENSE.txt
+    ReadmeUrl: README-SAR.md 
+    Labels: ['layer', 'lambda', 'ffmpeg', 'ffprobe']
+    HomePageUrl: https://github.com/serverlesspub/ffmpeg-aws-lambda-layer
+    SemanticVersion: 1.0.0
+    SourceCodeUrl: https://github.com/serverlesspub/ffmpeg-aws-lambda-layer

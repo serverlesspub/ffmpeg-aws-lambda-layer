@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Example project demonstrating the usage of the FFmpeg Layer for AWS Linux 2 runtimes.
+
+Parameters:
+  LambdaLayer:
+    Type: String
+  ConversionFileType:
+    Type: String
+    Default: jpg
+  ConversionMimeType:
+    Type: String
+    Default: image/jpeg
+  ThumbWidth:
+    Type: Number
+    Default: 300
+    Description: Thumbnail width in pixels 
+Resources:
+  UploadBucket:
+    Type: AWS::S3::Bucket
+
+  ResultsBucket:
+    Type: AWS::S3::Bucket
+
+  ConvertFileFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Timeout: 180
+      MemorySize: 1024
+      Runtime: nodejs10.x
+      CodeUri: src
+      Layers:
+        - !Ref LambdaLayer
+      Policies:
+      - S3CrudPolicy:
+          BucketName: !Sub "${AWS::StackName}-*"
+      Environment:
+        Variables:
+          OUTPUT_BUCKET: !Ref ResultsBucket
+          EXTENSION: !Sub '.${ConversionFileType}'
+          MIME_TYPE: !Ref ConversionMimeType
+          THUMB_WIDTH: !Ref ThumbWidth
+      Events:
+        FileUpload:
+          Type: S3
+          Properties:
+            Bucket: !Ref UploadBucket
+            Events: s3:ObjectCreated:*
+
+Outputs:
+    UploadBucket:
+      Description: "Upload S3 bucket"
+      Value: !Ref UploadBucket
+    ResultsBucket:
+      Description: "Results S3 bucket"
+      Value: !Ref ResultsBucket
+
