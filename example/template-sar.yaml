@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Example project demonstrating the deployment of the FFmpeg Layer for AWS Linux 2 runtimes via the AWS Serverless Application Repository, and its reference from within a function.
+
+Parameters:
+  ffmpegLambdaVersion:
+    Type: String
+    Default: 1.0.0
+    Description: The semantic version of the ffmpeg layer you wish to deploy.
+  ConversionFileType:
+    Type: String
+    Default: jpg
+  ConversionMimeType:
+    Type: String
+    Default: image/jpeg
+  ThumbWidth:
+    Type: Number
+    Default: 300
+    Description: Thumbnail width in pixels
+Resources:
+  UploadBucket:
+    Type: AWS::S3::Bucket
+
+  ResultsBucket:
+    Type: AWS::S3::Bucket
+
+  ffmpeglambdalayer:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location:
+        ApplicationId: arn:aws:serverlessrepo:us-east-1:145266761615:applications/ffmpeg-lambda-layer
+        SemanticVersion: !Ref ffmpegLambdaVersion
+
+  ConvertFileFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Timeout: 180
+      MemorySize: 1024
+      Runtime: nodejs10.x
+      CodeUri: src
+      Layers:
+        - !GetAtt ffmpeglambdalayer.Outputs.LayerVersion
+      Policies:
+      - S3CrudPolicy:
+          BucketName: !Sub "${AWS::StackName}-*"
+      Environment:
+        Variables:
+          OUTPUT_BUCKET: !Ref ResultsBucket
+          EXTENSION: !Sub '.${ConversionFileType}'
+          MIME_TYPE: !Ref ConversionMimeType
+          THUMB_WIDTH: !Ref ThumbWidth
+      Events:
+        FileUpload:
+          Type: S3
+          Properties:
+            Bucket: !Ref UploadBucket
+            Events: s3:ObjectCreated:*
+
+Outputs:
+    UploadBucket:
+      Description: "Upload S3 bucket"
+      Value: !Ref UploadBucket
+    ResultsBucket:
+      Description: "Results S3 bucket"
+      Value: !Ref ResultsBucket
