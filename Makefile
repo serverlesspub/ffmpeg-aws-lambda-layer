@@ -1,4 +1,5 @@
 STACK_NAME ?= ffmpeg-lambda-layer
+AWS_PROFILE ?= default
 
 clean: 
 	rm -rf build
@@ -10,11 +11,11 @@ build/layer/bin/ffmpeg:
 	mv build/ffmpeg*/ffmpeg build/ffmpeg*/ffprobe build/layer/bin
 
 build/output.yaml: template.yaml build/layer/bin/ffmpeg
-	aws cloudformation package --template $< --s3-bucket $(DEPLOYMENT_BUCKET) --output-template-file $@
+	aws --profile $(AWS_PROFILE) cloudformation package --template $< --s3-bucket $(DEPLOYMENT_BUCKET) --output-template-file $@
 
 deploy: build/output.yaml
-	aws cloudformation deploy --template $< --stack-name $(STACK_NAME)
-	aws cloudformation describe-stacks --stack-name $(STACK_NAME) --query Stacks[].Outputs --output table
+	aws --profile $(AWS_PROFILE) cloudformation deploy --template $< --stack-name $(STACK_NAME)
+	aws --profile $(AWS_PROFILE) cloudformation describe-stacks --stack-name $(STACK_NAME) --query Stacks[].Outputs --output table
 
 deploy-example:
 	cd example && \
