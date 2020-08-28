@@ -22,7 +22,7 @@ exports.handler = function (eventObject, context) {
 	console.log('converting', inputBucket, key, 'using', inputFile);
 	return s3Util.downloadFileFromS3(inputBucket, key, inputFile)
 		.then(() => childProcessPromise.spawn(
-			'/opt/bin/ffmpeg',
+			'/opt/ffmpeg/ffmpeg',
 			['-loglevel', 'error', '-y', '-i', inputFile, '-vf', `thumbnail,scale=${THUMB_WIDTH}:-1`, '-frames:v', '1', outputFile],
 			{env: process.env, cwd: workdir}
 		))
