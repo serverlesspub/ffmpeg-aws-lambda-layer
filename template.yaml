@@ -15,6 +15,8 @@ Resources:
       CompatibleRuntimes:
         - nodejs10.x
         - python3.6
+        - python3.7
+        - python3.8
         - ruby2.5
         - java8
         - go1.x
