@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  Static build of FFmpeg/FFprobe for Amazon Linux 2
+  Static build of FFmpeg/FFprobe for Amazon Linux 2 released under LGPL v2.1
 
   Check out https://github.com/serverlesspub/ffmpeg-aws-lambda-layer
   for more information.
@@ -9,16 +9,20 @@ Resources:
   LambdaLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      LayerName: ffmpeg 
-      Description: FFMPEG for AWS Lambda
+      LayerName: ffmpeg-lgpl 
+      Description: FFmpeg for AWS Lambda
       ContentUri: build/layer
       CompatibleRuntimes:
         - nodejs10.x
+        - nodejs12.x
+        - nodejs14.x
         - python3.6
+        - python3.7
+        - python3.8
         - ruby2.5
         - java8
         - go1.x
-      LicenseInfo: GPL-2.0-or-later
+      LicenseInfo: Apache 2.0, FFmpeg is released under LGPL v2.1
       RetentionPolicy: Retain
 
 Outputs:
@@ -28,12 +32,12 @@ Outputs:
 
 Metadata:
   AWS::ServerlessRepo::Application:
-    Name: ffmpeg-lambda-layer
+    Name: ffmpeg-lgpl-lambda-layer
     Description: >
       Static build of FFmpeg/FFprobe for Amazon Linux 2,
-      packaged as a Lambda layer. Bundles FFmpeg 4.1.3
+      packaged as a Lambda layer. Bundles FFmpeg 4.2.2 released under LGPL v2.1
     Author: Gojko Adzic
-    SpdxLicenseId: GPL-2.0-or-later
+    SpdxLicenseId: LGPL-2.1-or-later
     LicenseUrl: LICENSE.txt
     ReadmeUrl: README-SAR.md 
     Labels: ['layer', 'lambda', 'ffmpeg', 'ffprobe']

@@ -1,4 +1,4 @@
-STACK_NAME ?= ffmpeg-lambda-layer
+STACK_NAME ?= ffmpeg-lgpl-lambda-layer
 
 clean: 
 	rm -rf build
