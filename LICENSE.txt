@@ -1,1 +1,4 @@
-GPL v2, see http://ffmpeg.org/legal.html
+## License
+
+* These scripts: [MIT](https://opensource.org/licenses/MIT)
+* FFmpeg: GPLv2.1 <http://ffmpeg.org/legal.html>, John Van Sickle's static build GPL v3 <https://johnvansickle.com/ffmpeg/>

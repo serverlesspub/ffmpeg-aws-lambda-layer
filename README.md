@@ -19,7 +19,7 @@ For manual deployments and custom builds, read below...
 
 ## Deploying to AWS as a layer
 
-This package includes FFmpeg 4.1.3, packaged by Johan Van Sickle. Please consider supporting him for maintaining statically built FFmpeg packages. For more information, check out <https://johnvansickle.com/ffmpeg/>
+This package includes FFmpeg 4.1.3, packaged by John Van Sickle. Please consider supporting him for maintaining statically built FFmpeg packages. For more information, check out <https://johnvansickle.com/ffmpeg/>
 
 The output will be in the `result` dir.
 
@@ -50,4 +50,8 @@ Gojko Adzic <https://gojko.net>
 ## License
 
 * These scripts: [MIT](https://opensource.org/licenses/MIT)
-* FFmpeg: http://ffmpeg.org/legal.html
+* FFmpeg: GPLv2.1 <http://ffmpeg.org/legal.html>, John Van Sickle's static build GPL v3 <https://johnvansickle.com/ffmpeg/>
+
+## LGPL version
+
+*  [Giuseppe Battista](http://github.com/giusedroid) created a build that contains only LGPL components, for organisations that are concerned about GPL licensing. See it at <https://github.com/giusedroid/ffmpeg-aws-lambda-layer/tree/license/lgpl>
