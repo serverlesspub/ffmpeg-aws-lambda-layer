@@ -8,7 +8,7 @@ The example will deploy an upload bucket, a results bucket and a sample Lambda F
 
 ## How to deploy it?
 ```
-make deploy
+make deploy DEPLOYMENT_BUCKET=<YOUR BUCKET NAME>
 ```
 
 ## How to use it?
