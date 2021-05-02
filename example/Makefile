@@ -1,5 +1,5 @@
-STACK_NAME ?= ffmpeg-layer-example
-LAYER_STACK_NAME ?= ffmpeg-lambda-layer
+STACK_NAME ?= ffmpeg-lgpl-layer-example
+LAYER_STACK_NAME ?= ffmpeg-lgpl-lambda-layer
 
 LAMBDA_LAYER ?=$(shell aws cloudformation describe-stacks --stack-name $(LAYER_STACK_NAME) --query Stacks[].Outputs[].OutputValue --output text)
 SOURCES=$(shell find src/)

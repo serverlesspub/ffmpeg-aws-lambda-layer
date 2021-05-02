@@ -29,7 +29,7 @@ Resources:
       Handler: index.handler
       Timeout: 180
       MemorySize: 1024
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       CodeUri: src
       Layers:
         - !Ref LambdaLayer
