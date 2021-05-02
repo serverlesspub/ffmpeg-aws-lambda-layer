@@ -6,7 +6,7 @@ clean:
 build/layer/bin/ffmpeg: 
 	mkdir -p build/layer/bin
 	rm -rf build/ffmpeg*
-	cd build && curl -sL https://github.com/giusedroid/ffmpeg-lgpl-amazonlinux2/blob/main/release/ffmpeg-static-amazonlinux2-lgpl.tar.gz?raw=true | tar x
+	cd build && curl -sL https://github.com/giusedroid/ffmpeg-lgpl-amazonlinux2/blob/main/release/ffmpeg-static-amazonlinux2-lgpl.tar.gz?raw=true | tar xz
 	mv build/ffmpeg build/ffprobe build/layer/bin
 
 build/output.yaml: template.yaml build/layer/bin/ffmpeg
