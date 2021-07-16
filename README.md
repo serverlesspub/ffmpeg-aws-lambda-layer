@@ -29,6 +29,12 @@ Run the following command to deploy the compiled result as a layer in your AWS a
 make deploy DEPLOYMENT_BUCKET=<YOUR BUCKET NAME>
 ```
 
+You can optionally provide an S3 prefix, e.g.:
+
+```
+make deploy DEPLOYMENT_BUCKET=<YOUR BUCKET NAME> DEPLOYMENT_PREFIX=<YOUR PREFIX>
+```
+
 ### configuring the deployment
 
 By default, this uses `ffmpeg-lambda-layer` as the stack name. Provide a `STACK_NAME` variable when calling `make deploy` to use an alternative name.
