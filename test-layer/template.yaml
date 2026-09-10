@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Test function to verify the FFmpeg Lambda layer works correctly.
+
+Parameters:
+  FFmpegLayerArn:
+    Type: String
+    Description: ARN of the FFmpeg Lambda layer to test
+
+Resources:
+  TestFFmpegFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.handler
+      Runtime: python3.12
+      CodeUri: .
+      Timeout: 60
+      MemorySize: 512
+      Layers:
+        - !Ref FFmpegLayerArn
+
+Outputs:
+  TestFunction:
+    Description: Test Lambda function name
+    Value: !Ref TestFFmpegFunction
+  TestFunctionArn:
+    Description: Test Lambda function ARN
+    Value: !GetAtt TestFFmpegFunction.Arn

@@ -2,3 +2,5 @@ build
 *.pdf
 *.png
 *.svg
+.env
+packaged.yaml

@@ -43,6 +43,44 @@ make deploy-example DEPLOYMENT_BUCKET=<YOUR BUCKET NAME>
 
 For more information on using FFmpeg and FFprobe, check out <https://ffmpeg.org/documentation.html>
 
+## Quick Redeploy
+
+To redeploy the layer using the preconfigured script:
+
+```
+./temp.sh
+```
+
+This runs `make deploy DEPLOYMENT_BUCKET=lambda-layer-bucket-ffmpeg`, which downloads the FFmpeg build, packages it, and deploys the Lambda layer.
+
+### Updating the FFmpeg version
+
+1. Edit the `FFMPEG_URL` variable at the top of the `Makefile` to point to the new release URL from [BtbN/FFmpeg-Builds](https://github.com/BtbN/FFmpeg-Builds/releases).
+2. Clean and redeploy:
+
+```
+make clean
+./temp.sh
+```
+
+`make clean` removes the `build/` directory, forcing a fresh download and repackage.
+
+### Troubleshooting deployment failures
+
+If the deploy fails with a CloudFormation error like `Stack is in UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS`:
+
+1. Wait for the rollback to finish:
+   ```
+   aws cloudformation wait stack-rollback-complete --stack-name ffmpeg-lambda-layer
+   ```
+2. Then redeploy:
+   ```
+   make clean
+   ./temp.sh
+   ```
+
+If you see `Uploaded file must be a non-empty zip` or `S3 Error Code: NoSuchKey`, it means the packaged artifact in S3 is stale or corrupt. Running `make clean` before deploying fixes this by regenerating everything from scratch.
+
 ## Author
 
 Gojko Adzic <https://gojko.net>

@@ -5,21 +5,32 @@ Description: >
 
   Check out https://github.com/serverlesspub/ffmpeg-aws-lambda-layer
   for more information.
+
+Parameters:
+  DeploymentBucket:
+    Type: String
+    Description: S3 bucket containing the layer zip
+  LayerZipKey:
+    Type: String
+    Default: ffmpeg-layer.zip
+    Description: S3 key for the layer zip
+
 Resources:
   LambdaLayer:
-    Type: AWS::Serverless::LayerVersion
+    Type: AWS::Lambda::LayerVersion
     Properties:
-      LayerName: ffmpeg 
+      LayerName: ffmpeg
       Description: FFMPEG for AWS Lambda
-      ContentUri: build/layer
+      Content:
+        S3Bucket: !Ref DeploymentBucket
+        S3Key: !Ref LayerZipKey
       CompatibleRuntimes:
-        - nodejs10.x
-        - python3.6
-        - ruby2.5
-        - java8
-        - go1.x
+        - python3.12
+        - python3.11
+        - python3.10
+        - nodejs20.x
+        - nodejs18.x
       LicenseInfo: GPL-2.0-or-later
-      RetentionPolicy: Retain
 
 Outputs:
   LayerVersion:
@@ -35,7 +46,7 @@ Metadata:
     Author: Gojko Adzic
     SpdxLicenseId: GPL-2.0-or-later
     LicenseUrl: LICENSE.txt
-    ReadmeUrl: README-SAR.md 
+    ReadmeUrl: README-SAR.md
     Labels: ['layer', 'lambda', 'ffmpeg', 'ffprobe']
     HomePageUrl: https://github.com/serverlesspub/ffmpeg-aws-lambda-layer
     SemanticVersion: 1.0.0
