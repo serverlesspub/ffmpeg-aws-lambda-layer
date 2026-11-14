@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Test function to verify the qpdf Lambda layer (and its coexistence with the ffmpeg layer).
+
+Parameters:
+  QpdfLayerArn:
+    Type: String
+    Description: ARN of the qpdf Lambda layer to test
+  FFmpegLayerArn:
+    Type: String
+    Default: ''
+    Description: Optional ARN of the ffmpeg layer, to test both layers attached together
+
+Conditions:
+  HasFFmpeg: !Not [!Equals [!Ref FFmpegLayerArn, '']]
+
+Resources:
+  TestQpdfFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      CodeUri: .
+      Timeout: 60
+      MemorySize: 512
+      Layers:
+        - !Ref QpdfLayerArn
+        - !If [HasFFmpeg, !Ref FFmpegLayerArn, !Ref AWS::NoValue]
+
+Outputs:
+  TestFunction:
+    Description: Test Lambda function name
+    Value: !Ref TestQpdfFunction
+  TestFunctionArn:
+    Description: Test Lambda function ARN
+    Value: !GetAtt TestQpdfFunction.Arn

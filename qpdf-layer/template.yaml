@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+  qpdf (PDF transformation CLI) packaged as a Lambda layer.
+  Binaries land in /opt/bin, shared libraries in /opt/lib.
+
+Parameters:
+  DeploymentBucket:
+    Type: String
+    Description: S3 bucket containing the layer zip
+  LayerZipKey:
+    Type: String
+    Description: S3 key for the layer zip (versioned, e.g. qpdf-layer-12.4.2.zip)
+
+Resources:
+  QpdfLayer:
+    Type: AWS::Lambda::LayerVersion
+    # Keep old layer versions when the stack is updated or deleted, so functions
+    # pinned to an older version can still be redeployed.
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LayerName: qpdf
+      Description: qpdf for AWS Lambda (x86_64, Amazon Linux 2023 runtimes)
+      Content:
+        S3Bucket: !Ref DeploymentBucket
+        S3Key: !Ref LayerZipKey
+      CompatibleRuntimes:
+        - nodejs22.x
+        - nodejs20.x
+        - python3.13
+        - python3.12
+      CompatibleArchitectures:
+        - x86_64
+      LicenseInfo: Apache-2.0
+
+Outputs:
+  LayerVersion:
+    Description: Layer ARN Reference
+    Value: !Ref QpdfLayer

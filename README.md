@@ -81,6 +81,22 @@ If the deploy fails with a CloudFormation error like `Stack is in UPDATE_ROLLBAC
 
 If you see `Uploaded file must be a non-empty zip` or `S3 Error Code: NoSuchKey`, it means the packaged artifact in S3 is stale or corrupt. Running `make clean` before deploying fixes this by regenerating everything from scratch.
 
+## qpdf layer
+
+A separate layer with [qpdf](https://github.com/qpdf/qpdf), for repairing, encrypting, decrypting, linearizing, merging and splitting PDFs, lives in [qpdf-layer/](qpdf-layer). It is built and deployed the same way:
+
+```
+cd qpdf-layer
+make deploy DEPLOYMENT_BUCKET=<YOUR BUCKET NAME>
+```
+
+See [docs/QPDF-LAYER.md](docs/QPDF-LAYER.md) for:
+- deployment
+- attaching the layer to a function, alongside ffmpeg
+- Node.js usage
+- testing
+- known problems when combining the two layers
+
 ## Author
 
 Gojko Adzic <https://gojko.net>
